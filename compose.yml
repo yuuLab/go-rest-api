@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  go-app:
+    build:
+      context: ./
+      dockerfile: ./build/local/docker/go/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/go/app
+    tty: true
+    depends_on:
+      rdb:
+        condition: service_healthy
+    container_name: "app-api"
+    env_file:
+      - .env
+    networks:
+      - app_network
+
+  rdb:
+    image: mysql:8.0
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.mysql/data:/var/lib/mysql
+    tty: true
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    container_name: "app-rdb"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    name: app_network
+    driver: bridge

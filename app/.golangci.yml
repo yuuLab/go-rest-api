@@ -1,0 +1,136 @@
+version: "2"
+run:
+  go: "1.23"
+  modules-download-mode: readonly
+  tests: true
+output:
+  formats:
+    text:
+      path: stdout
+      print-linter-name: true
+      print-issued-lines: true
+linters:
+  default: none
+  enable:
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - copyloopvar
+    - dupl
+    - durationcheck
+    - errcheck
+    - errorlint
+    - goconst
+    - gocyclo
+    - godot
+    - gosec
+    - govet
+    - ineffassign
+    - makezero
+    - mirror
+    - nakedret
+    - nilerr
+    - nilnil
+    - noctx
+    - perfsprint
+    - prealloc
+    - protogetter
+    - revive
+    - sloglint
+    - spancheck
+    - staticcheck
+    - tagalign
+    - testifylint
+    - testpackage
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - whitespace
+  settings:
+    dupl:
+      threshold: 100
+    errcheck:
+      check-type-assertions: true
+      check-blank: false
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+    gocyclo:
+      min-complexity: 15
+    gosec:
+      excludes:
+        - G104
+      config:
+        global:
+          audit: enabled
+    govet:
+      disable:
+        - shadow
+      enable-all: true
+    nakedret:
+      max-func-lines: 30
+    revive:
+      rules:
+        - name: exported
+          arguments:
+            - disableStutteringCheck
+        - name: var-naming
+        - name: package-comments
+        - name: error-return
+        - name: error-naming
+        - name: indent-error-flow
+        - name: blank-imports
+        - name: context-as-argument
+        - name: context-keys-type
+    staticcheck:
+      checks:
+        - all
+        - -ST1000
+    testifylint:
+      enable-all: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - dupl
+          - funlen
+          - goconst
+          - gocyclo
+          - gosec
+        path: _test\.go
+      - linters:
+          - gocyclo
+        path: cmd/
+        text: main function
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+issues:
+  max-issues-per-linter: 5
+  max-same-issues: 5
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/yuuLab/go-rest-api)
+      custom-order: true
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
