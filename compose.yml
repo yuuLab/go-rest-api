@@ -27,10 +27,10 @@ services:
       --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: app_db
-      MYSQL_USER: app_user
-      MYSQL_PASSWORD: app_pass
+      MYSQL_ROOT_PASSWORD: root # edit your password
+      MYSQL_DATABASE: app_db # edit your db name
+      MYSQL_USER: app_user # edit your username
+      MYSQL_PASSWORD: app_pass # edit your password
     ports:
       - "3306:3306"
     volumes:

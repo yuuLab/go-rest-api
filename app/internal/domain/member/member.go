@@ -17,14 +17,14 @@ type Member struct {
 }
 
 // New instantiates a brand-new member aggregate ensuring invariants hold.
-func New(firstName, lastName, passwordHash string, now time.Time) (*Member, error) {
+func New(firstName, lastName string) (*Member, error) {
 	firstName = strings.TrimSpace(firstName)
 	lastName = strings.TrimSpace(lastName)
 
 	return &Member{
 		firstName: firstName,
 		lastName:  lastName,
-		createdAt: now,
+		createdAt: time.Now(),
 	}, nil
 }
 

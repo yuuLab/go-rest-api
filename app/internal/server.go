@@ -12,8 +12,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-
-	"github.com/yuuLab/go-rest-api/internal/presentation"
 )
 
 func RunServer() {
@@ -25,8 +23,6 @@ func RunServer() {
 	if p := os.Getenv("PORT"); p != "" {
 		port = p
 	}
-
-	presentation.Router(e)
 
 	// Start server in a goroutine
 	go func() {

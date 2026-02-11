@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/yuuLab/go-rest-api/internal/domain/member"
@@ -31,4 +33,23 @@ func (r MemberRepository) Save(ctx context.Context, entity member.Member) (*memb
 	}
 
 	return member.Reconstitute(member.ID(id), entity.FirstName(), entity.LastName(), entity.CreatedAt()), nil
+}
+
+// FindByID finds a member by ID.
+func (r MemberRepository) FindByID(ctx context.Context, id member.ID) (*member.Member, error) {
+	q := model.New(nil)
+	result, err := q.FindMember(ctx, uint64(id))
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, fmt.Errorf("member not found: id=%d", id)
+		}
+		return nil, fmt.Errorf("failed to find member: %w", err)
+	}
+
+	return member.Reconstitute(
+		member.ID(result.ID),
+		result.FirstName,
+		result.LastName,
+		result.CreatedAt,
+	), nil
 }
